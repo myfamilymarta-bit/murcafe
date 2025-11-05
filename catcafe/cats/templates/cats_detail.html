@@ -1,0 +1,252 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ cat.name }} - Мурчащий уголок{% endblock %}
+
+{% block breadcrumb_items %}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .cat-detail-section {
+        padding: 80px 0;
+        background: linear-gradient(135deg, var(--light-color) 0%, #fffaf5 100%);
+    }
+
+    .cat-main-image {
+        width: 100%;
+        height: 500px;
+        object-fit: cover;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .info-card {
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        margin-bottom: 30px;
+    }
+
+    .characteristic-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--light-color);
+        padding: 10px 15px;
+        border-radius: 20px;
+        margin: 5px;
+        font-weight: 500;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 10px 20px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+
+    .status-available {
+        background: var(--secondary-color);
+        color: white;
+    }
+
+    .status-reserved {
+        background: var(--accent-color);
+        color: var(--dark-color);
+    }
+
+    .btn-adopt {
+        background: linear-gradient(135deg, var(--primary-color), #FF9EB5);
+        color: white;
+        padding: 15px 30px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .btn-adopt:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(255, 183, 197, 0.3);
+        color: white;
+    }
+
+    .cat-basic-info {
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="cat-detail-section">
+    <div class="container">
+        <!-- Основная информация сбоку от изображения -->
+        <div class="row mb-5">
+            <!-- Изображение кота -->
+            <div class="col-lg-6 mb-4">
+                <img src="{% static cat.image %}" alt="{{ cat.name }}" class="cat-main-image">
+            </div>
+
+            <!-- Информация о коте -->
+            <div class="col-lg-6">
+                <div class="cat-basic-info">
+                    <h1 class="display-5 fw-bold mb-3">{{ cat.name }}</h1>
+
+                    <div class="mb-4">
+                        <span class="status-badge {% if cat.status == 'available' %}status-available{% else %}status-reserved{% endif %}">
+                            {% if cat.status == 'available' %}
+                                <i class="fas fa-home me-2"></i> Ищет дом
+                            {% else %}
+                                <i class="fas fa-clock me-2"></i> В процессе
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    <div class="row mb-4 justify-content-center">
+                        <div class="col-md-6">
+                            <p><strong>Пол:</strong> {% if cat.gender == 'M' %}Мальчик{% else %}Девочка{% endif %}</p>
+                            <p><strong>Возраст:</strong> {{ cat.age }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Порода:</strong> {{ cat.breed|default:"Метис" }}</p>
+                            {% if cat.arrival_date %}
+                            <p><strong>В кафе с:</strong> {{ cat.arrival_date|date:"d.m.Y" }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {% if cat.description %}
+                    <div class="mb-4">
+                        <h5>О котике</h5>
+                        <p class="text-muted">{{ cat.description|truncatewords:30 }}</p>
+                    </div>
+                    {% endif %}
+
+                    {% if cat.status == 'available' %}
+                    <div class="d-grid gap-2 d-md-flex justify-content-center">
+                        <a href="https://t.me/murchashij_ugolok_bot" target="_blank" class="btn-adopt">
+                            <i class="fas fa-heart me-2"></i>
+                            Приютить {{ cat.name }}
+                        </a>
+                        <a href="{% url 'cats' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left me-2"></i>
+                            Назад
+                        </a>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-warning mb-4">
+                        <i class="fas fa-info-circle me-2"></i>
+                        {{ cat.name }} уже нашел свою семью и скоро переедет в новый дом!
+                    </div>
+                    <a href="{% url 'cats' %}" class="btn btn-primary">
+                        <i class="fas fa-paw me-2"></i>
+                        Посмотреть других котиков
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Дополнительная информация -->
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="info-card">
+                    <h3><i class="fas fa-heart me-2 text-primary"></i>О характере</h3>
+                    <div class="mb-4">
+                        {% if cat.temperament %}
+                        <span class="characteristic-badge">
+                            <i class="fas fa-user me-1"></i>
+                            {{ cat.temperament }}
+                        </span>
+                        {% endif %}
+                        {% if cat.good_with_children %}
+                        <span class="characteristic-badge">
+                            <i class="fas fa-child me-1"></i>
+                            Ладит с детьми
+                        </span>
+                        {% endif %}
+                        {% if cat.good_with_other_animals %}
+                        <span class="characteristic-badge">
+                            <i class="fas fa-paw me-1"></i>
+                            Дружелюбен к животным
+                        </span>
+                        {% endif %}
+                    </div>
+                    <p class="fs-5">{{ cat.description }}</p>
+                </div>
+
+                {% if cat.story %}
+                <div class="info-card">
+                    <h3><i class="fas fa-book me-2 text-primary"></i>История</h3>
+                    <p class="fs-5">{{ cat.story }}</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="col-lg-4">
+                <div class="info-card">
+                    <h3><i class="fas fa-stethoscope me-2 text-primary"></i>Здоровье</h3>
+                    <div class="mb-3">
+                        <p><strong>Состояние:</strong> {{ cat.health_status|default:"Здоров" }}</p>
+                        <p><strong>Прививки:</strong> {{ cat.vaccinated|yesno:"Сделаны,Нет" }}</p>
+                        <p><strong>Стерилизация:</strong> {{ cat.sterilized|yesno:"Проведена,Нет" }}</p>
+                    </div>
+                    {% if cat.special_needs %}
+                    <div class="alert alert-info">
+                        <strong>Особые потребности:</strong> {{ cat.special_needs }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="info-card">
+                    <h3><i class="fas fa-home me-2 text-primary"></i>Идеальный дом</h3>
+                    <p>{{ cat.ideal_home|default:"Любящая семья, готовая заботиться о питомце." }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Похожие котики -->
+        {% if similar_cats %}
+        <div class="row mt-5">
+            <div class="col-12">
+                <h3 class="section-title text-start">Похожие котики</h3>
+                <div class="row">
+                    {% for similar_cat in similar_cats %}
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="card cat-card h-100">
+                            <img src="{% static similar_cat.image %}" class="cat-main-image" alt="{{ similar_cat.name }}" style="height: 200px;">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">{{ similar_cat.name }}</h5>
+                                <p class="text-muted">
+                                    {% if similar_cat.gender == 'M' %}Мальчик{% else %}Девочка{% endif %},
+                                    {{ similar_cat.age }}
+                                </p>
+                                <a href="{% url 'cats_detail' similar_cat.id %}" class="btn btn-outline-primary btn-sm">
+                                    Подробнее
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
