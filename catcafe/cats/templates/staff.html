@@ -1,10 +1,229 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Наша команда - Мурчащий уголок{% endblock %}
+
+{% block extra_css %}
+<style>
+    .staff-section {
+        padding: 80px 0;
+        background: linear-gradient(135deg, var(--light-color) 0%, #fffaf5 100%);
+    }
+
+    .staff-card {
+        border: none;
+        border-radius: 20px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        margin-bottom: 30px;
+        background: white;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .staff-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .staff-image {
+        height: 300px;
+        object-fit: cover;
+        width: 100%;
+    }
+
+    .position-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+        color: black;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin: 10px 0;
+        border: 1px solid #495057;
+        text-decoration: none !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-review {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+        color: black;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        text-decoration: none !important;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 8px rgba(255, 183, 197, 0.2);
+    }
+
+    .btn-review:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(255, 183, 197, 0.3);
+        color: white;
+        text-decoration: none !important;
+    }
+
+    .btn-review, .position-badge,
+    .btn-review:hover, .btn-review:focus,
+    .btn-review:active, .btn-review:visited {
+        text-decoration: none !important;
+    }
+
+    .btn-review span,
+    .btn-review i {
+        text-decoration: none !important;
+    }
+
+    .experience-badge {
+        background: var(--light-color);
+        color: var(--primary-color);
+        padding: 8px 16px;
+        border-radius: 15px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 500;
+        border: 1px solid var(--primary-color);
+        text-decoration: none !important;
+    }
+
+    .reviews-section {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+        padding: 80px 0;
+    }
+
+    .review-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease;
+    }
+
+    .review-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .stars {
+        color: #ffd700;
+    }
+
+    .btn, .btn-light {
+        text-decoration: none !important;
+    }
+
+    .btn:hover, .btn-light:hover {
+        text-decoration: none !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<section class="staff-section">
+    <div class="container">
+        <h2 class="section-title">Наша команда</h2>
+        <p class="lead text-center mb-5">Знакомьтесь с людьми, которые создают уютную атмосферу и заботятся о наших пушистых жителях</p>
+
+        <div class="row">
+            {% for staff in staff_members %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card staff-card">
+                    <img src="{% static staff.image %}" class="staff-image" alt="{{ staff.get_full_name }}">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{ staff.get_full_name }}</h5>
+                        <div class="position-badge">{{ staff.get_position_display }}</div>
+
+                        {% if staff.description %}
+                        <p class="card-text">{{ staff.description }}</p>
+                        {% elif staff.bio %}
+                        <p class="card-text">{{ staff.bio }}</p>
+                        {% endif %}
+
+                        {% if staff.experience %}
+                        <div class="experience-badge mb-3">
+                            <i class="fas fa-award"></i>
+                            Опыт: {{ staff.experience }} лет
+                        </div>
+                        {% endif %}
+
+                        <a href="{% url 'submit_review' %}?staff_id={{ staff.id }}" class="btn-review">
+                            <i class="fas fa-star me-2"></i>Оставить отзыв
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <div class="py-5">
+                    <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                    <h4>Команда формируется</h4>
+                    <p class="text-muted">Скоро здесь появится информация о нашей команде!</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="reviews-section">
+    <div class="container">
+        <h2 class="section-title text-black">Отзывы о нашей команде</h2>
+        <p class="lead text-center mb-5 text-black">Что говорят наши гости о сотрудниках кафе</p>
+
+        <div class="row" id="reviewsContainer">
+            {% for review in latest_reviews %}
+            <div class="col-lg-6 mb-4">
+                <div class="review-card">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="mb-0">{{ review.customer_name|default:"Аноним" }}</h5>
+                        <div class="stars">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= review.rating %}
+                                    <i class="fas fa-star"></i>
+                                {% else %}
+                                    <i class="far fa-star"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <p class="text-muted mb-2">
+                        <i class="fas fa-user-tie me-2"></i>
+                        Для: {{ review.staff.get_full_name|default:review.staff.name }}
+                    </p>
+                    <p class="mb-0">{{ review.review_text|default:review.review }}</p>
+                    <div class="text-muted mt-3">
+                        <small><i class="far fa-clock me-1"></i>{{ review.created_at|date:"d.m.Y" }}</small>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <div class="text-white py-4">
+                    <i class="fas fa-comments fa-3x mb-3 opacity-75"></i>
+                    <h4>Пока нет отзывов</h4>
+                    <p>Будьте первым, кто оставит отзыв о нашей команде!</p>
+                    <a href="{% url 'submit_review' %}" class="btn btn-light">
+                        <i class="fas fa-star me-2"></i>Оставить отзыв
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if latest_reviews %}
+        <div class="text-center mt-4">
+            <a href="{% url 'submit_review' %}" class="btn btn-light btn-lg">
+                <i class="fas fa-star me-2"></i>Оставить свой отзыв
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
