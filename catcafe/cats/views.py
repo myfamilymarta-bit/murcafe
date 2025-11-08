@@ -238,4 +238,3 @@ def contact_form(request):
             messages.error(request, 'Произошла ошибка при отправке сообщения. Пожалуйста, попробуйте еще раз.')
 
     return redirect('index')
-

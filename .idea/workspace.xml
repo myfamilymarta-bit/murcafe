@@ -1,18 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="cfd0dd56-c3c6-481c-aab4-0abebc45050a" name="Changes" comment="" />
+    <list default="true" id="cfd0dd56-c3c6-481c-aab4-0abebc45050a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/catcafe/catcafe/asgi.py" beforeDir="false" afterPath="$PROJECT_DIR$/catcafe/catcafe/asgi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/catcafe/catcafe/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/catcafe/catcafe/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/catcafe/catcafe/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/catcafe/catcafe/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/catcafe/catcafe/wsgi.py" beforeDir="false" afterPath="$PROJECT_DIR$/catcafe/catcafe/wsgi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/catcafe/cats/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/catcafe/cats/api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/catcafe/cats/apps.py" beforeDir="false" afterPath="$PROJECT_DIR$/catcafe/cats/apps.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/catcafe/cats/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/catcafe/cats/migrations/0001_initial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/catcafe/cats/migrations/0002_alter_menuitem_category_delete_menucategory.py" beforeDir="false" afterPath="$PROJECT_DIR$/catcafe/cats/migrations/0002_alter_menuitem_category_delete_menucategory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/catcafe/cats/migrations/0003_alter_menuitem_options_menuitem_order_and_more.py" beforeDir="false" afterPath="$PROJECT_DIR$/catcafe/cats/migrations/0003_alter_menuitem_options_menuitem_order_and_more.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/catcafe/cats/migrations/0004_alter_staff_options_remove_staff_bio_and_more.py" beforeDir="false" afterPath="$PROJECT_DIR$/catcafe/cats/migrations/0004_alter_staff_options_remove_staff_bio_and_more.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/catcafe/cats/migrations/0005_remove_staff_photo_staff_image_alter_cat_image_and_more.py" beforeDir="false" afterPath="$PROJECT_DIR$/catcafe/cats/migrations/0005_remove_staff_photo_staff_image_alter_cat_image_and_more.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/catcafe/cats/migrations/0006_alter_menuitem_options_remove_menuitem_order_and_more.py" beforeDir="false" afterPath="$PROJECT_DIR$/catcafe/cats/migrations/0006_alter_menuitem_options_remove_menuitem_order_and_more.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/catcafe/cats/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/catcafe/cats/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/catcafe/cats/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/catcafe/cats/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/catcafe/cats/templates/cats.html" beforeDir="false" afterPath="$PROJECT_DIR$/catcafe/cats/templates/cats.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/catcafe/cats/templates/cats_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/catcafe/cats/templates/cats_detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/catcafe/cats/templates/help.html" beforeDir="false" afterPath="$PROJECT_DIR$/catcafe/cats/templates/help.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/catcafe/cats/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/catcafe/cats/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/catcafe/cats/templates/menu.html" beforeDir="false" afterPath="$PROJECT_DIR$/catcafe/cats/templates/menu.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/catcafe/cats/templates/reviews.html" beforeDir="false" afterPath="$PROJECT_DIR$/catcafe/cats/templates/reviews.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/catcafe/cats/templates/staff.html" beforeDir="false" afterPath="$PROJECT_DIR$/catcafe/cats/templates/staff.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/catcafe/cats/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/catcafe/cats/tests.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/catcafe/cats/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/catcafe/cats/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/catcafe/cats/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/catcafe/cats/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/catcafe/manage.py" beforeDir="false" afterPath="$PROJECT_DIR$/catcafe/manage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/catcafe/telegram/adoptions.csv" beforeDir="false" afterPath="$PROJECT_DIR$/catcafe/telegram/adoptions.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/catcafe/telegram/keyboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/catcafe/telegram/keyboard.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/catcafe/telegram/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/catcafe/telegram/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/catcafe/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/catcafe/templates/base.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 5
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="33q9w61NAYcBzTd92AQq2qmjT3w" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -22,7 +61,8 @@
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master"
+    "git-widget-placeholder": "main",
+    "settings.editor.selected.configurable": "settings.sync"
   }
 }]]></component>
   <component name="SharedIndexes">
