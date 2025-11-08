@@ -1,10 +1,307 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Наши котики - Мурчащий уголок{% endblock %}
+
+{% block extra_css %}
+<style>
+    .cats-section {
+        padding: 80px 0;
+        background: linear-gradient(135deg, var(--light-color) 0%, #fffaf5 100%);
+    }
+
+    .cat-card {
+        border: none;
+        border-radius: 20px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        margin-bottom: 30px;
+        background: white;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .cat-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .cat-image {
+        height: 250px;
+        object-fit: cover;
+        width: 100%;
+    }
+
+    .status-badge {
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .status-available {
+        background: var(--secondary-color);
+        color: white;
+    }
+
+    .status-reserved {
+        background: var(--accent-color);
+        color: var(--dark-color);
+    }
+
+    .filter-section {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        margin-bottom: 40px;
+    }
+
+    .cat-characteristic {
+        display: inline-block;
+        background: var(--light-color);
+        padding: 5px 12px;
+        border-radius: 15px;
+        margin: 2px;
+        font-size: 0.85rem;
+    }
+
+    .btn-reset {
+        background: var(--light-color);
+        color: var(--dark-color);
+        border: 1px solid #dee2e6;
+        padding: 8px 20px;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-reset:hover {
+        background: #e9ecef;
+        color: var(--dark-color);
+    }
+
+    .no-cats-message {
+        display: none;
+        text-align: center;
+        padding: 60px 20px;
+    }
+
+    .no-cats-icon {
+        font-size: 4rem;
+        color: var(--light-color);
+        margin-bottom: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="cats-section">
+    <div class="container">
+        <h2 class="section-title">Наши пушистые жители</h2>
+        <p class="lead text-center mb-5">Каждый из этих котиков ищет теплый дом и любящую семью</p>
+
+        <div class="filter-section">
+            <div class="row align-items-end">
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Пол</label>
+                    <select class="form-select" id="genderFilter">
+                        <option value="">Все</option>
+                        <option value="M">Мальчики</option>
+                        <option value="F">Девочки</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Возраст</label>
+                    <select class="form-select" id="ageFilter">
+                        <option value="">Все возрасты</option>
+                        <option value="kitten">Котенок</option>
+                        <option value="young">Молодой</option>
+                        <option value="adult">Взрослый</option>
+                        <option value="senior">Пожилой</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Статус</label>
+                    <select class="form-select" id="statusFilter">
+                        <option value="">Все</option>
+                        <option value="available">Ищут дом</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Характер</label>
+                    <select class="form-select" id="temperamentFilter">
+                        <option value="">Любой</option>
+                        <option value="active">Активный</option>
+                        <option value="calm">Спокойный</option>
+                        <option value="playful">Игривый</option>
+                        <option value="affectionate">Ласковый</option>
+                        <option value="shy">Стеснительный</option>
+                        <option value="lazy">Ленивый</option>
+                    </select>
+                </div>
+                <div class="col-12 text-center mt-3">
+                    <button class="btn btn-reset" id="resetFilters">
+                        <i class="fas fa-redo me-2"></i>Сбросить фильтры
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="noCatsMessage" class="no-cats-message">
+            <h3 class="text-muted mb-3">По вашим запросам котиков не найдено</h3>
+            <p class="text-muted mb-4">Попробуйте изменить параметры фильтрации или сбросить фильтры</p>
+        </div>
+
+        <div class="row" id="catsContainer">
+            {% for cat in cats %}
+            <div class="col-lg-4 col-md-6 mb-4 cat-item"
+                 data-gender="{{ cat.gender }}"
+                 data-age="{{ cat.age }}"
+                 data-status="{{ cat.status }}"
+                 data-temperament="{{ cat.temperament }}">
+                <div class="card cat-card h-100">
+                    <img src="{% static cat.image %}" class="cat-image" alt="{{ cat.name }}">
+
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="card-title mb-0">{{ cat.name }}</h5>
+                            <span class="status-badge {% if cat.status == 'available' %}status-available{% else %}status-reserved{% endif %}">
+                                {{ cat.get_status_display }}
+                            </span>
+                        </div>
+
+                        <div class="mb-3">
+                            <small class="text-muted">
+                                <i class="fas fa-venus-mars me-1"></i>
+                                {{ cat.get_gender_display }} •
+                                {{ cat.get_age_display }} •
+                                {{ cat.breed|default:"Метис" }}
+                            </small>
+                        </div>
+
+                        <p class="card-text">{{ cat.description|truncatewords:20 }}</p>
+
+                        <div class="mb-3">
+                            {% if cat.temperament %}
+                            <span class="cat-characteristic">
+                                <i class="fas fa-heart me-1"></i>{{ cat.get_temperament_display }}
+                            </span>
+                            {% endif %}
+                            {% if cat.good_with_children %}
+                            <span class="cat-characteristic">
+                                <i class="fas fa-child me-1"></i>Ладит с детьми
+                            </span>
+                            {% endif %}
+                            {% if cat.good_with_other_animals %}
+                            <span class="cat-characteristic">
+                                <i class="fas fa-paw me-1"></i>Дружит с животными
+                            </span>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-grid">
+                            <a href="{% url 'cats_detail' cat.id %}" class="btn btn-outline-primary">
+                                <i class="fas fa-info-circle me-2"></i>Подробнее о {{ cat.name }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <div class="py-5">
+                    <i class="fas fa-cat fa-3x text-muted mb-3"></i>
+                    <h4>Пока нет котиков</h4>
+                    <p class="text-muted">Скоро здесь появятся наши пушистые друзья!</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="bg-white rounded-3 p-4 text-center">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <h3 class="text-primary">{{ stats.total_cats|default:0 }}</h3>
+                            <p class="text-muted mb-0">Всего котиков</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <h3 class="text-success">{{ stats.available_cats|default:0 }}</h3>
+                            <p class="text-muted mb-0">Ищут дом</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <h3 class="text-warning">{{ stats.adopted_this_month|default:0 }}</h3>
+                            <p class="text-muted mb-0">Пристроено в этом месяце</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <h3 class="text-info">{{ stats.total_adopted|default:0 }}</h3>
+                            <p class="text-muted mb-0">Всего пристроено</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const filters = {
+            gender: document.getElementById('genderFilter'),
+            age: document.getElementById('ageFilter'),
+            status: document.getElementById('statusFilter'),
+            temperament: document.getElementById('temperamentFilter')
+        };
+
+        const resetButton = document.getElementById('resetFilters');
+        const noCatsMessage = document.getElementById('noCatsMessage');
+
+        function filterCats() {
+            const genderValue = filters.gender.value;
+            const ageValue = filters.age.value;
+            const statusValue = filters.status.value;
+            const temperamentValue = filters.temperament.value;
+
+            let visibleCats = 0;
+
+            document.querySelectorAll('.cat-item').forEach(card => {
+                const showCard =
+                    (!genderValue || card.dataset.gender === genderValue) &&
+                    (!ageValue || card.dataset.age === ageValue) &&
+                    (!statusValue || card.dataset.status === statusValue) &&
+                    (!temperamentValue || card.dataset.temperament === temperamentValue);
+
+                card.style.display = showCard ? 'block' : 'none';
+
+                if (showCard) {
+                    visibleCats++;
+                }
+            });
+
+            if (visibleCats === 0) {
+                noCatsMessage.style.display = 'block';
+            } else {
+                noCatsMessage.style.display = 'none';
+            }
+        }
+
+        function resetFilters() {
+            Object.values(filters).forEach(filter => {
+                filter.value = '';
+            });
+            filterCats();
+        }
+
+        Object.values(filters).forEach(filter => {
+            filter.addEventListener('change', filterCats);
+        });
+
+        resetButton.addEventListener('click', resetFilters);
+
+        filterCats();
+    });
+</script>
+{% endblock %}
