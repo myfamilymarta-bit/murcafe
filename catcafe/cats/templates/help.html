@@ -1,10 +1,474 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Помощь и поддержка - Мурчащий уголок{% endblock %}
+
+{% block extra_css %}
+<style>
+    .help-section {
+        padding: 80px 0;
+        background: linear-gradient(135deg, var(--light-color) 0%, #fffaf5 100%);
+    }
+
+    .help-card {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        margin-bottom: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+    .help-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .help-icon {
+        font-size: 3rem;
+        color: var(--primary-color);
+        margin-bottom: 20px;
+    }
+
+    .contact-method {
+        background: var(--light-color);
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-left: 4px solid var(--primary-color);
+    }
+
+    .faq-item {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 15px;
+        box-shadow: 0 3px 15px rgba(0, 0, 0, 0.06);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .faq-item:hover {
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .faq-question {
+        font-weight: 600;
+        color: var(--dark-color);
+        margin-bottom: 0;
+    }
+
+    .faq-answer {
+        color: var(--text-color);
+        margin-top: 15px;
+        display: none;
+    }
+
+    .faq-item.active .faq-answer {
+        display: block;
+    }
+
+    .donation-option {
+        text-align: center;
+        padding: 25px;
+        border: 2px dashed var(--primary-color);
+        border-radius: 15px;
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+    }
+
+    .donation-option:hover {
+        background: rgba(255, 183, 197, 0.1);
+        border-style: solid;
+    }
+
+    .volunteer-benefit {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        padding: 15px;
+        background: var(--light-color);
+        border-radius: 10px;
+    }
+
+    .benefit-icon {
+        font-size: 1.5rem;
+        color: var(--primary-color);
+        margin-right: 15px;
+        min-width: 30px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="help-section">
+    <div class="container">
+        <h2 class="section-title">Как помочь нашему котокафе</h2>
+        <p class="lead text-center mb-5">Ваша поддержка помогает нам заботиться о котиках и находить им любящие семьи</p>
+
+        <div class="row mb-5">
+            <div class="col-lg-4 mb-4">
+                <div class="help-card text-center">
+                    <div class="help-icon">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                    <h4>Финансовая помощь</h4>
+                    <p>Помогите покрыть расходы на корм, лечение и содержание котиков</p>
+                    <ul class="list-unstyled text-start">
+                        <li><i class="fas fa-check text-success me-2"></i>Корм и лакомства</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Ветеринарные услуги</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Средства ухода</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Оборудование кафе</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-lg-4 mb-4">
+                <div class="help-card text-center">
+                    <div class="help-icon">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <h4>Волонтерство</h4>
+                    <p>Станьте волонтером и помогайте котикам напрямую</p>
+                    <ul class="list-unstyled text-start">
+                        <li><i class="fas fa-check text-success me-2"></i>Уход за котиками</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Помощь в социализации</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Организация мероприятий</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Фотография котиков</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-lg-4 mb-4">
+                <div class="help-card text-center">
+                    <div class="help-icon">
+                        <i class="fas fa-shipping-fast"></i>
+                    </div>
+                    <h4>Материальная помощь</h4>
+                    <p>Пожертвуйте необходимые вещи для котиков и кафе</p>
+                    <ul class="list-unstyled text-start">
+                        <li><i class="fas fa-check text-success me-2"></i>Корм и наполнитель</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Игрушки и когтеточки</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Лежанки и домики</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Средства гигиены</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="help-card">
+                    <h3 class="text-center mb-4"><i class="fas fa-donate me-2 text-primary"></i>Финансовая поддержка</h3>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="donation-option">
+                                <h5>Единоразово</h5>
+                                <div class="price-tag" style="background: var(--primary-color); color: var(--dark-color); padding: 10px 20px; border-radius: 20px; display: inline-block; margin: 15px 0;">
+                                    Любая сумма
+                                </div>
+                                <p>Разовое пожертвование на текущие нужды</p>
+                                <button class="btn btn-outline-primary" onclick="showPaymentMethods()">Пожертвовать</button>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="donation-option">
+                                <h5>Ежемесячно</h5>
+                                <div class="price-tag" style="background: var(--secondary-color); color: var(--dark-color); padding: 10px 20px; border-radius: 20px; display: inline-block; margin: 15px 0;">
+                                    От 500 ₽/мес
+                                </div>
+                                <p>Регулярная помощь для стабильной работы</p>
+                                <button class="btn btn-outline-primary" onclick="showPaymentMethods()">Подписаться</button>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="donation-option">
+                                <h5>Кормление котика</h5>
+                                <div class="price-tag" style="background: var(--accent-color); color: var(--dark-color); padding: 10px 20px; border-radius: 20px; display: inline-block; margin: 15px 0;">
+                                    1500 ₽/мес
+                                </div>
+                                <p>Полное содержание одного котика в месяц</p>
+                                <button class="btn btn-outline-primary" onclick="showPaymentMethods()">Оплатить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-lg-6">
+                <div class="help-card">
+                    <h3 class="mb-4"><i class="fas fa-users me-2 text-primary"></i>Стать волонтером</h3>
+                    <p>Мы всегда рады помощи в уходе за нашими пушистыми жителями. Волонтеры помогают нам:</p>
+
+                    <div class="volunteer-benefit">
+                        <div class="benefit-icon">
+                            <i class="fas fa-paw"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-1">Уход за котиками</h6>
+                            <p class="mb-0 small">Кормление, уборка, расчесывание</p>
+                        </div>
+                    </div>
+
+                    <div class="volunteer-benefit">
+                        <div class="benefit-icon">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-1">Игры и социализация</h6>
+                            <p class="mb-0 small">Помощь в адаптации котиков</p>
+                        </div>
+                    </div>
+
+                    <div class="volunteer-benefit">
+                        <div class="benefit-icon">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-1">Фото и видео съемка</h6>
+                            <p class="mb-0 small">Создание контента для пристройства</p>
+                        </div>
+                    </div>
+
+                    <div class="volunteer-benefit">
+                        <div class="benefit-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-1">Работа с гостями</h6>
+                            <p class="mb-0 small">Помощь в общении с посетителями</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="help-card">
+                    <h3 class="mb-4"><i class="fas fa-box-open me-2 text-primary"></i>Материальная помощь</h3>
+                    <p>Мы с благодарностью принимаем следующие вещи:</p>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <br>
+                            <h6>Срочно нужно:</h6>
+                            <ul class="list-unstyled">
+                                <br>
+                                <li><i class="fas fa-star text-warning me-2"></i>Сухой корм премиум</li>
+                                <br>
+                                <li><i class="fas fa-star text-warning me-2"></i>Влажный корм</li>
+                                <br>
+                                <li><i class="fas fa-star text-warning me-2"></i>Древесный наполнитель</li>
+                                <br>
+                                <li><i class="fas fa-star text-warning me-2"></i>Переноски для кошек</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <br>
+                            <h6>Всегда пригодится:</h6>
+                            <ul class="list-unstyled">
+                                <br>
+                                <li><i class="fas fa-heart text-danger me-2"></i>Игрушки</li>
+                                <br>
+                                <li><i class="fas fa-heart text-danger me-2"></i>Лежанки</li>
+                                <br>
+                                <li><i class="fas fa-heart text-danger me-2"></i>Когтеточки</li>
+                                <br>
+                                <li><i class="fas fa-heart text-danger me-2"></i>Миски и поилки</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info mt-3">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Перед привозом вещей</strong> пожалуйста, свяжитесь с нами для уточнения актуальных потребностей.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="help-card">
+                    <h3 class="text-center mb-4"><i class="fas fa-address-book me-2 text-primary"></i>Контакты для помощи</h3>
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="contact-method text-center">
+                                <i class="fas fa-phone-alt fa-2x text-primary mb-3"></i>
+                                <h5>Телефон</h5>
+                                <p class="mb-1">+375 (33) 123-45-67</p>
+                                <small class="text-muted">Ежедневно 10:00-20:00</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="contact-method text-center">
+                                <i class="fab fa-telegram fa-2x text-primary mb-3"></i>
+                                <h5>Telegram</h5>
+                                <p class="mb-1">@help_murchashij_ugolok_bot</p>
+                                <small class="text-muted">Быстрый ответ</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="contact-method text-center">
+                                <i class="fas fa-envelope fa-2x text-primary mb-3"></i>
+                                <h5>Email</h5>
+                                <p class="mb-1">help@murcat-cafe.com</p>
+                                <small class="text-muted">Для подробных вопросов</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <h5>Координатор волонтеров</h5>
+                        <p class="mb-1"><strong>Марта</strong></p>
+                        <p class="text-muted">+375 (33) 765-43-21 | volunteer@murcat-cafe.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="help-card">
+                    <h3 class="text-center mb-4"><i class="fas fa-question-circle me-2 text-primary"></i>Часто задаваемые вопросы</h3>
+
+                    <div class="faq-item" onclick="toggleFAQ(this)">
+                        <h5 class="faq-question">Как часто можно приходить волонтером?</h5>
+                        <div class="faq-answer">
+                            <p>Вы можете выбрать удобный для вас график. Мы рады помощи как на регулярной основе (1-2 раза в неделю), так и разовым визитам. Главное - предварительно согласовать время визита с координатором.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" onclick="toggleFAQ(this)">
+                        <h5 class="faq-question">Можно ли помочь дистанционно?</h5>
+                        <div class="faq-answer">
+                            <p>Да! Мы нуждаемся в помощи с ведением социальных сетей, созданием контента, переводом текстов, дизайном и другими задачами, которые можно выполнять удаленно.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" onclick="toggleFAQ(this)">
+                        <h5 class="faq-question">Какую сумму лучше пожертвовать?</h5>
+                        <div class="faq-answer">
+                            <p>Любая сумма важна! 500 рублей - это корм для одного котика на 3 дня, 1500 рублей - полное содержание на месяц, 5000 рублей - помощь в оплате ветеринарных услуг.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" onclick="toggleFAQ(this)">
+                        <h5 class="faq-question">Можно ли привезти корм или вещи без предварительного звонка?</h5>
+                        <div class="faq-answer">
+                            <p>Мы рекомендуем всегда звонить заранее, так как у нас может не быть места для хранения или конкретная марка корма может не подходить нашим котикам по рекомендациям ветеринара.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" onclick="toggleFAQ(this)">
+                        <h5 class="faq-question">Предоставляете ли вы документы для налогового вычета?</h5>
+                        <div class="faq-answer">
+                            <p>Да, при пожертвовании от 1000 рублей мы можем предоставить все необходимые документы для налогового вычета. Обратитесь к нашему бухгалтеру по email: finance@murcat-cafe.ru</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-5">
+            <div class="help-card bg-secondary text-white">
+                <h3 class="text-white">Готовы помочь нашим котикам?</h3>
+                <p class="mb-4">Каждая помощь, большая или маленькая, делает жизнь наших пушистых жителей лучше</p>
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    <a href="tel:+375331234567" class="btn btn-light btn-lg">
+                        <i class="fas fa-phone me-2"></i>Позвонить
+                    </a>
+                    <a href="https://t.me/help_murchashij_ugolok_bot" target="_blank" class="btn btn-light btn-lg">
+                        <i class="fab fa-telegram me-2"></i>Написать в Telegram
+                    </a>
+                    <a href="mailto:help@murcat-cafe.ru" class="btn btn-light btn-lg">
+                        <i class="fas fa-envelope me-2"></i>Написать email
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal fade" id="paymentModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Способы оплаты</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100 text-center">
+                            <div class="card-body">
+                                <i class="fab fa-cc-visa fa-2x text-primary mb-3"></i>
+                                <h6>Банковская карта</h6>
+                                <p class="small text-muted">Visa, MasterCard, Мир</p>
+                                <button class="btn btn-outline-primary btn-sm">Оплатить</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100 text-center">
+                            <div class="card-body">
+                                <i class="fab fa-cc-paypal fa-2x text-primary mb-3"></i>
+                                <h6>PayPal</h6>
+                                <p class="small text-muted">Международные переводы</p>
+                                <button class="btn btn-outline-primary btn-sm">Оплатить</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100 text-center">
+                            <div class="card-body">
+                                <i class="fab fa-cc-apple-pay fa-2x text-primary mb-3"></i>
+                                <h6>Apple Pay/Google Pay</h6>
+                                <p class="small text-muted">Быстрая оплата</p>
+                                <button class="btn btn-outline-primary btn-sm">Оплатить</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100 text-center">
+                            <div class="card-body">
+                                <i class="fas fa-qrcode fa-2x text-primary mb-3"></i>
+                                <h6>QR-код</h6>
+                                <p class="small text-muted">СБП и другие системы</p>
+                                <button class="btn btn-outline-primary btn-sm">Показать QR</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-info mt-3">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Для корпоративных пожертвований и волонтерских программ свяжитесь с нами по телефону.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function toggleFAQ(element) {
+        element.classList.toggle('active');
+    }
+
+    function showPaymentMethods() {
+        const modal = new bootstrap.Modal(document.getElementById('paymentModal'));
+        modal.show();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const firstFAQ = document.querySelector('.faq-item');
+        if (firstFAQ) {
+            firstFAQ.classList.add('active');
+        }
+    });
+</script>
+{% endblock %}
