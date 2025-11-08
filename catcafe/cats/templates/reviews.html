@@ -1,10 +1,226 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Оставить отзыв - Мурчащий уголок{% endblock %}
+
+{% block extra_css %}
+<style>
+    .review-form-section {
+        padding: 80px 0;
+        background: linear-gradient(135deg, var(--light-color) 0%, #fffaf5 100%);
+    }
+
+    .review-form-card {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .rating-stars {
+        display: flex;
+        gap: 10px;
+        margin: 15px 0;
+        justify-content: center;
+        flex-direction: row; /* Обеспечиваем слева направо */
+    }
+
+    .rating-stars input {
+        display: none;
+    }
+
+    .rating-stars label {
+        cursor: pointer;
+        font-size: 2rem;
+        color: #ddd;
+        transition: all 0.2s ease;
+        padding: 5px;
+        order: 1; /* Обеспечиваем правильный порядок */
+    }
+
+    .rating-stars label:hover {
+        transform: scale(1.2);
+        color: #ffd700;
+    }
+
+    .rating-stars input:checked + label {
+        color: #ffd700;
+    }
+
+    /* Подсветка звезд при наведении слева направо */
+    .rating-stars label:hover,
+    .rating-stars input:hover ~ label {
+        color: #ffd700;
+    }
+
+    .rating-stars input:checked ~ label {
+        color: #ffd700;
+    }
+
+    .form-control, .form-select {
+        border: 2px solid var(--light-color);
+        border-radius: 12px;
+        padding: 12px 15px;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(255, 183, 197, 0.25);
+    }
+
+    .btn-submit {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        border: none;
+        padding: 12px 40px;
+        border-radius: 25px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(255, 183, 197, 0.3);
+    }
+
+    .selected-staff-info {
+        background: var(--light-color);
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        border-left: 4px solid var(--primary-color);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="review-form-section">
+    <div class="container">
+        <div class="review-form-card">
+            <h2 class="section-title text-start mb-4 text-center">Оставить отзыв</h2>
+            <p class="text-muted mb-4">Поделитесь своими впечатлениями о работе нашего сотрудника</p>
+
+            <form method="post" action="{% url 'submit_review' %}">
+                {% csrf_token %}
+
+                {% if staff_id and selected_staff %}
+                <div class="selected-staff-info">
+                    <h6 class="mb-1">Вы оставляете отзыв для:</h6>
+                    <p class="mb-0 fw-bold">{{ selected_staff.get_full_name }} - {{ selected_staff.get_position_display }}</p>
+                    <input type="hidden" name="staff" value="{{ staff_id }}">
+                </div>
+                {% endif %}
+
+                <div class="mb-4">
+                    <label for="staffSelect" class="form-label">Выберите сотрудника *</label>
+                    <select class="form-select" id="staffSelect" name="staff" {% if staff_id %}disabled{% endif %} required>
+                        <option value="">-- Выберите сотрудника --</option>
+                        {% for staff in staff_members %}
+                        <option value="{{ staff.id }}" {% if staff.id == staff_id %}selected{% endif %}>
+                            {{ staff.get_full_name }} - {{ staff.get_position_display }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    {% if staff_id %}
+                    <small class="text-muted">Сотрудник выбран автоматически. Чтобы изменить, вернитесь на страницу команды.</small>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    <label for="customerName" class="form-label">Ваше имя *</label>
+                    <input type="text" class="form-control" id="customerName" name="customer_name" required
+                           placeholder="Введите ваше имя" value="{{ form.customer_name.value|default:'' }}">
+                </div>
+
+                <div class="mb-4">
+                    <label for="reviewText" class="form-label">Ваш отзыв *</label>
+                    <textarea class="form-control" id="reviewText" name="review" rows="5" required
+                              placeholder="Расскажите о вашем опыте общения с сотрудником...">{{ form.review.value|default:'' }}</textarea>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Оценка *</label>
+                    <div class="rating-stars">
+                        <input type="radio" id="star1" name="rating" value="1" required>
+                        <label for="star1">★</label>
+
+                        <input type="radio" id="star2" name="rating" value="2">
+                        <label for="star2">★</label>
+
+                        <input type="radio" id="star3" name="rating" value="3">
+                        <label for="star3">★</label>
+
+                        <input type="radio" id="star4" name="rating" value="4">
+                        <label for="star4">★</label>
+
+                        <input type="radio" id="star5" name="rating" value="5">
+                        <label for="star5">★</label>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a href="{% url 'staff' %}" class="btn btn-outline-secondary me-md-2">Назад</a>
+                    <button type="submit" class="btn btn-submit">
+                        <i class="fas fa-paper-plane me-2"></i>Отправить отзыв
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        function updateStars() {
+            const checkedStar = document.querySelector('.rating-stars input:checked');
+            if (checkedStar) {
+                const value = parseInt(checkedStar.value);
+                const labels = document.querySelectorAll('.rating-stars label');
+
+                labels.forEach((label, index) => {
+                    if (index < value) {
+                        label.style.color = '#ffd700';
+                    } else {
+                        label.style.color = '#ddd';
+                    }
+                });
+            }
+        }
+
+        const stars = document.querySelectorAll('.rating-stars input');
+        stars.forEach(star => {
+            star.addEventListener('change', updateStars);
+
+            star.addEventListener('mouseenter', function() {
+                const hoverValue = parseInt(this.value);
+                const labels = document.querySelectorAll('.rating-stars label');
+
+                labels.forEach((label, index) => {
+                    if (index < hoverValue) {
+                        label.style.color = '#ffd700';
+                    } else {
+                        label.style.color = '#ddd';
+                    }
+                });
+            });
+        });
+
+        document.querySelector('.rating-stars').addEventListener('mouseleave', updateStars);
+
+        updateStars();
+
+        const staffSelect = document.getElementById('staffSelect');
+        if (!staffSelect.disabled) {
+            staffSelect.addEventListener('change', function() {
+                console.log('Выбран сотрудник:', this.value);
+            });
+        }
+    });
+</script>
+{% endblock %}
