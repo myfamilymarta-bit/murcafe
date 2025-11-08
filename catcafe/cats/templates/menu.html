@@ -1,10 +1,462 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Меню - Мурчащий уголок{% endblock %}
+
+{% block extra_css %}
+<style>
+    .menu-section {
+        padding: 80px 0;
+        background: linear-gradient(135deg, var(--light-color) 0%, #fffaf5 100%);
+    }
+
+    .menu-category {
+        margin-bottom: 60px;
+    }
+
+    .category-title {
+        position: relative;
+        margin-bottom: 40px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid var(--primary-color);
+    }
+
+    .category-title:after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 80px;
+        height: 2px;
+        background: var(--secondary-color);
+    }
+
+    .menu-item-card {
+        border: none;
+        border-radius: 20px;
+        overflow: hidden;
+        transition: all 0.4s ease;
+        margin-bottom: 25px;
+        background: white;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        position: relative;
+        height: 100%;
+    }
+
+    .menu-item-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    }
+
+    .menu-item-image {
+        height: 200px;
+        object-fit: cover;
+        width: 100%;
+        transition: transform 0.4s ease;
+    }
+
+    .menu-item-card:hover .menu-item-image {
+        transform: scale(1.05);
+    }
+
+    .price-tag {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+        color: black;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        box-shadow: 0 4px 15px rgba(255, 183, 197, 0.3);
+        flex-shrink: 0; /* Ценник не сжимается */
+    }
+
+    .card-body {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    /* ИЗМЕНЕНИЯ: Заголовок больше, но цена остается справа */
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 12px;
+        gap: 15px;
+    }
+
+    .card-title {
+        font-weight: 800; /* Более жирный шрифт */
+        color: var(--dark-color);
+        font-size: 1.4rem; /* Увеличиваем размер шрифта */
+        line-height: 1.3;
+        margin: 0;
+        flex: 1; /* Занимает все доступное пространство */
+        min-width: 0; /* Позволяет тексту переноситься */
+    }
+
+    .card-description {
+        color: var(--text-color);
+        line-height: 1.4;
+        margin-bottom: 10px;
+        font-size: 0.95rem; /* Немного увеличиваем описание */
+        flex-grow: 1;
+    }
+
+    .item-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-top: auto;
+    }
+
+    .meta-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .volume-info {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        color: var(--text-color);
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .diet-info {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        padding: 4px 8px;
+        border-radius: 12px;
+    }
+
+    .diet-vegan {
+        background: #E8F5E8;
+        color: #2E7D32;
+    }
+
+    .diet-vegetarian {
+        background: #F1F8E9;
+        color: #558B2F;
+    }
+
+    .diet-none {
+        background: #FFF3E0;
+        color: #EF6C00;
+    }
+
+    .cat-indicator {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        background: linear-gradient(135deg, var(--accent-color), #FFB6C1);
+        color: white;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .allergens-section {
+        margin-top: 6px;
+        padding: 8px;
+        background: #FFF9E6;
+        border-radius: 10px;
+        border: 1px solid #FFEAA7;
+    }
+
+    .allergen-label {
+        font-size: 0.75rem;
+        color: #856404;
+        margin-bottom: 4px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .allergens-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+
+    .allergen-tag {
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 3px 8px;
+        border-radius: 8px;
+        border: 1px solid;
+    }
+
+    .allergen-gluten { background: #FFF3CD; color: #856404; border-color: #FFEAA7; }
+    .allergen-milk { background: #D6EAF8; color: #1B4F72; border-color: #AED6F1; }
+    .allergen-eggs { background: #FADBD8; color: #78281F; border-color: #F5B7B1; }
+    .allergen-nuts { background: #E8DAEF; color: #4A235A; border-color: #D2B4DE; }
+    .allergen-soy { background: #D5DBDB; color: #1B2631; border-color: #AAB7B8; }
+    .allergen-fish { background: #D1F2EB; color: #0E6251; border-color: #A2D9CE; }
+    .allergen-shellfish { background: #FDEDEC; color: #943126; border-color: #FADBD8; }
+
+    .special-badge {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: linear-gradient(135deg, #FFD700, #FFA500);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        z-index: 2;
+        box-shadow: 0 4px 12px rgba(255, 165, 0, 0.3);
+    }
+
+    .popular-badge {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        background: linear-gradient(135deg, #FF6B6B, #FF8E8E);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        z-index: 2;
+    }
+
+    .image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.3));
+        z-index: 1;
+    }
+
+    .filter-buttons {
+        margin-bottom: 40px;
+    }
+
+    .filter-btn {
+        margin: 5px;
+        border-radius: 25px;
+        padding: 12px 25px;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        border: 2px solid var(--primary-color);
+    }
+
+    .filter-btn.active {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+        color: black;
+        border-color: transparent;
+        box-shadow: 0 4px 15px rgba(255, 183, 197, 0.3);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="menu-section">
+    <div class="container">
+        <h2 class="section-title">Наше меню</h2>
+        <p class="lead text-center mb-5">Вкусные блюда и напитки для вас и ваших пушистых друзей</p>
+
+        <div class="filter-buttons text-center">
+            <button class="btn btn-outline-primary filter-btn active" data-category="all">
+                <i class="fas fa-utensils me-2"></i>Все меню
+            </button>
+            <button class="btn btn-outline-primary filter-btn" data-category="coffee">
+                <i class="fas fa-coffee me-2"></i>Кофе
+            </button>
+            <button class="btn btn-outline-primary filter-btn" data-category="tea">
+                <i class="fas fa-mug-hot me-2"></i>Чай
+            </button>
+            <button class="btn btn-outline-primary filter-btn" data-category="desserts">
+                <i class="fas fa-ice-cream me-2"></i>Десерты
+            </button>
+            <button class="btn btn-outline-primary filter-btn" data-category="snacks">
+                <i class="fas fa-cheese me-2"></i>Закуски
+            </button>
+            <button class="btn btn-outline-primary filter-btn" data-category="cats">
+                <i class="fas fa-cat me-2"></i>Для котиков
+            </button>
+            <button class="btn btn-outline-primary filter-btn" data-category="specials">
+                <i class="fas fa-star me-2"></i>Специальные
+            </button>
+        </div>
+
+        {% for category_key, category_data in menu_by_category.items %}
+            <div class="menu-category" data-category="{{ category_key }}">
+                <h3 class="category-title">
+                    {% if category_key == 'coffee' %}
+                        <i class="fas fa-coffee me-2 text-primary"></i>Кофе и напитки
+                    {% elif category_key == 'tea' %}
+                        <i class="fas fa-mug-hot me-2 text-primary"></i>Чайная коллекция
+                    {% elif category_key == 'desserts' %}
+                        <i class="fas fa-ice-cream me-2 text-primary"></i>Десерты
+                    {% elif category_key == 'snacks' %}
+                        <i class="fas fa-cheese me-2 text-primary"></i>Закуски
+                    {% elif category_key == 'cats' %}
+                        <i class="fas fa-cat me-2 text-primary"></i>Для котиков
+                    {% elif category_key == 'specials' %}
+                        <i class="fas fa-star me-2 text-primary"></i>Специальные предложения
+                    {% else %}
+                        <i class="fas fa-utensils me-2 text-primary"></i>{{ category_key|title }}
+                    {% endif %}
+                </h3>
+
+                {% if category_data.description %}
+                <p class="text-muted mb-4">{{ category_data.description }}</p>
+                {% endif %}
+
+                <div class="row menu-items-container">
+                    {% for item in category_data.items %}
+                    <div class="col-lg-4 col-md-6 menu-item" data-category="{{ category_key }}">
+                        <div class="card menu-item-card h-100 position-relative">
+                            {% if item.is_special %}
+                            <div class="special-badge">
+                                <i class="fas fa-star me-1"></i>Специальное
+                            </div>
+                            {% endif %}
+                            {% if item.is_popular %}
+                            <div class="popular-badge">
+                                <i class="fas fa-fire me-1"></i>Популярное
+                            </div>
+                            {% endif %}
+
+                            <div class="position-relative">
+                                <img src="{% static item.image %}" class="menu-item-image" alt="{{ item.name }}">
+                                <div class="image-overlay"></div>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="card-header">
+                                    <h5 class="card-title">{{ item.name }}</h5>
+                                    <span class="price-tag">{{ item.price }} BYN</span>
+                                </div>
+
+                                <p class="card-description">{{ item.description }}</p>
+
+                                <div class="item-meta">
+                                    {% if item.volume %}
+                                    <div class="meta-row">
+                                        <span class="volume-info">
+                                            <i class="fas fa-weight-hanging"></i>
+                                            Вес: {{ item.volume }}
+                                        </span>
+                                    </div>
+                                    {% endif %}
+
+                                    <div class="meta-row">
+                                        {% if item.vegetarian %}
+                                        <span class="diet-info diet-{{ item.vegetarian }}">
+                                            <i class="fas fa-leaf"></i>
+                                            {% if item.vegetarian == 'vegan' %}Веганское
+                                            {% elif item.vegetarian == 'vegetarian' %}Вегетарианское
+                                            {% else %}Содержит мясо
+                                            {% endif %}
+                                        </span>
+                                        {% endif %}
+
+                                        {% if category_key == 'cats' %}
+                                        <span class="cat-indicator">
+                                            <i class="fas fa-paw"></i>Для котиков
+                                        </span>
+                                        {% endif %}
+                                    </div>
+
+                                    {% if item.allergens %}
+                                    <div class="allergens-section">
+                                        <div class="allergen-label">
+                                            <i class="fas fa-exclamation-triangle"></i>Аллергены:
+                                        </div>
+                                        <div class="allergens-container">
+                                            {% for allergen in item.get_allergens_list %}
+                                            <span class="allergen-tag allergen-{{ allergen }}">
+                                                {{ allergen }}
+                                            </span>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% empty %}
+        <div class="text-center py-5">
+            <i class="fas fa-utensils fa-3x text-muted mb-3"></i>
+            <h4>Меню пока не готово</h4>
+            <p class="text-muted">Мы работаем над нашим меню. Скоро здесь появятся вкусные предложения!</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const categories = document.querySelectorAll('.menu-category');
+        const menuItems = document.querySelectorAll('.menu-item');
+
+        function filterMenu(category) {
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`[data-category="${category}"]`).classList.add('active');
+
+            if (category === 'all') {
+                categories.forEach(cat => {
+                    cat.style.display = 'block';
+                    cat.style.opacity = '1';
+                });
+                menuItems.forEach(item => {
+                    item.style.display = 'block';
+                });
+            } else {
+                categories.forEach(cat => {
+                    cat.style.display = 'none';
+                    cat.style.opacity = '0';
+                });
+
+                const targetCategory = document.querySelector(`.menu-category[data-category="${category}"]`);
+                if (targetCategory) {
+                    targetCategory.style.display = 'block';
+                    setTimeout(() => {
+                        targetCategory.style.opacity = '1';
+                    }, 50);
+                }
+
+                menuItems.forEach(item => {
+                    item.style.display = 'none';
+                });
+
+                const targetItems = document.querySelectorAll(`.menu-item[data-category="${category}"]`);
+                targetItems.forEach(item => {
+                    item.style.display = 'block';
+                });
+            }
+        }
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const category = this.dataset.category;
+                filterMenu(category);
+            });
+        });
+
+        filterMenu('all');
+    });
+</script>
+{% endblock %}
