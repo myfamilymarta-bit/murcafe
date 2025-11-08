@@ -1,10 +1,186 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Мурчащий уголок - Уютное котокафе{% endblock %}
+
+{% block content %}
+<section class="hero-section" style="background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%); padding: 80px 0 60px;">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4 text-black text-center">Добро пожаловать в Мурчащий уголок!</h1>
+                <p class="lead mb-4 text-black text-center">Место, где уютная атмосфера встречается с пушистыми друзьями. Наслаждайтесь вкусным кофе в компании наших очаровательных котиков.</p>
+                <div class="d-flex flex-wrap gap-3 justify-content-center">
+                    <a href="{% url 'menu' %}" class="btn btn-light btn-lg">
+                        <i class="fas fa-utensils me-2"></i>Посмотреть меню
+                    </a>
+                    <a href="{% url 'cats' %}" class="btn btn-light btn-lg">
+                        <i class="fas fa-cat me-2"></i>Наши котики
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <img src="{% static 'images/cat-hero.webp' %}" alt="Котик" class="img-fluid float-animation" style="max-height: 380px;">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-padding">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 text-center">
+                <div class="card menu-card">
+                    <img src="{% static 'images/about-cafe.jpg.jpg' %}" alt="Наше котокафе" class="img-fluid rounded-3 shadow">
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <h2 class="section-title">О нашем уголке</h2>
+                <p class="mb-4">Мурчащий уголок - это не просто кафе, а настоящий дом для котиков, ищущих семью. Мы создали уютное пространство, где каждый может:</p>
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-coffee feature-icon me-3"></i>
+                                    <span>Насладиться вкусным кофе</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-cat feature-icon me-3"></i>
+                                    <span>Пообщаться с котиками</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-heart feature-icon me-3"></i>
+                                    <span>Найти пушистого друга</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-book feature-icon me-3"></i>
+                                    <span>Отдохнуть с книгой</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-padding bg-primary-soft">
+    <div class="container">
+        <h2 class="section-title text-center">Наши пушистые жители</h2>
+        <p class="text-center mb-5">Познакомьтесь с нашими очаровательными котиками, которые ищут любящую семью</p>
+
+        <div class="row justify-content-center">
+            {% for cat in featured_cats|slice:":3" %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card feature-card h-100">
+                    <img src="{% static cat.image %}" class="card-img-top" alt="{{ cat.name }}" style="height: 250px; object-fit: cover;">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{ cat.name }}</h5>
+                        <p class="text-muted">
+                            {% if cat.gender == 'M' %}Мальчик{% else %}Девочка{% endif %}, {{ cat.get_age_display }}
+                        </p>
+                        <p class="card-text">{{ cat.short_description|default:cat.description|truncatewords:15 }}</p>
+                        <div class="mb-3">
+                            <span class="badge {% if cat.status == 'available' %}bg-success{% else %}bg-warning{% endif %}">
+                                {% if cat.status == 'available' %}Ищет дом{% else %}В процессе{% endif %}
+                            </span>
+                        </div>
+                        <a href="{% url 'cats_detail' cat.id %}" class="btn btn-outline-primary">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p class="text-muted">Скоро здесь появятся наши котики!</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'cats' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-paw me-2"></i>Посмотреть всех котиков
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="section-padding">
+    <div class="container">
+        <h2 class="section-title text-center">Почему выбирают нас</h2>
+        <div class="row justify-content-center">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h5>Безопасность</h5>
+                    <p>Все котики здоровы, привиты и прошли ветеринарный осмотр</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h5>Уютная атмосфера</h5>
+                    <p>Комфортное пространство для людей и котиков</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h5>Забота о животных</h5>
+                    <p>Мы находим любящие семьи для наших пушистых друзей</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-coffee"></i>
+                    </div>
+                    <h5>Вкусные угощения</h5>
+                    <p>Свежая выпечка и качественный кофе</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-padding bg-secondary-soft">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="section-title">Готовы встретиться с нами?</h2>
+                <p class="lead mb-4">Приходите в гости к нашим котикам и проведите время в уютной атмосфере</p>
+                <div class="row justify-content-center">
+                    <div class="col-md-4 mb-3">
+                        <i class="fas fa-map-marker-alt feature-icon"></i>
+                        <h5>Адрес</h5>
+                        <p>ул. Кошачья, 15</p>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <i class="fas fa-clock feature-icon"></i>
+                        <h5>Часы работы</h5>
+                        <p>Ежедневно с 10:00 до 22:00</p>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <i class="fas fa-phone feature-icon"></i>
+                        <h5>Телефон</h5>
+                        <p>+375 (33) 123-45-67</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
